@@ -109,19 +109,20 @@ class ToDoDBAdapter(
 
     fun fetchToDoItem(rowID: String): ToDoItem? {
         val db = readableDatabase
-
+        var toDoItem: ToDoItem? = null
         try{
             val cursor = db.rawQuery("SELECT * FROM $DB_TABLE_TODO_LIST WHERE $TODO_COLUMN_ID = '$rowID'", null)
             if (cursor != null) {
-                val toDoItem = ToDoItem("",
-//                    cursor.getString(cursor.getColumnIndexOrThrow(TODO_COLUMN_ID)),
-                    cursor.getString(cursor.getColumnIndexOrThrow(TODO_TITLE)),
-                    cursor.getString(cursor.getColumnIndexOrThrow(TODO_DESC)),
-                    cursor.getString(cursor.getColumnIndexOrThrow(TODO_TIMESTAMP))
-                )
+                if (cursor.moveToFirst()) {
+                    toDoItem = ToDoItem(
+                        cursor.getString(cursor.getColumnIndexOrThrow(TODO_COLUMN_ID)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(TODO_TITLE)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(TODO_DESC)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(TODO_TIMESTAMP))
+                    )
+                }
                 cursor.close()
                 db.close()
-                return toDoItem
             }
         } catch (ex: Exception) {
             Log.e(ContextObjects.DATABASE_NAME, ex.toString())
@@ -129,7 +130,7 @@ class ToDoDBAdapter(
             db?.close()
             close()
         }
-        return null
+        return toDoItem
     }
 
     fun fetchAllToDoItems(): ArrayList<ToDoItem> {
