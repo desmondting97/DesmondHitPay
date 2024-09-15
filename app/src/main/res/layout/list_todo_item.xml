@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="15dp"
+    android:paddingHorizontal="15dp"
+    android:clipToPadding="false">
+
+    <TextView
+        android:id="@+id/title_textview"
+        style="@style/Title_Heading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Title"/>
+    
+    <TextView
+        android:id="@+id/description"
+        style="@style/Body_Heading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="5dp"
+        android:text="Description"/>
+
+    <TextView
+        android:id="@+id/timestamp_textview"
+        style="@style/Desc_Heading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/timestamp"
+        android:layout_marginBottom="15dp"/>
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/gray"
+        android:layout_marginStart="-15dp"
+        android:layout_marginEnd="-15dp" />
+
+</androidx.appcompat.widget.LinearLayoutCompat>
