@@ -5,15 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.desmondhitpay.R
-import com.example.desmondhitpay.database.ToDoDBAdapter
 import com.example.desmondhitpay.databinding.FragmentSecondBinding
 import com.example.desmondhitpay.model.ToDoItem
 import com.google.android.material.appbar.MaterialToolbar
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
 
@@ -59,6 +55,6 @@ class AddItemFragment : BaseFragment() {
         val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
         val date = dateFormat.format(Date())
 
-        return ToDoItem(title = binding.titleEdittext.text.toString(), description = binding.descEdittext.text.toString(), timeStamp = date)
+        return ToDoItem(title = binding.titleEdittext.text.toString(), desc = binding.descEdittext.text.toString(), timeStamp = date)
     }
 }

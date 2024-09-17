@@ -6,6 +6,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.desmondhitpay.R
@@ -13,6 +14,9 @@ import com.example.desmondhitpay.adapter.ToDoListAdapter
 import com.example.desmondhitpay.databinding.FragmentFirstBinding
 import com.example.desmondhitpay.model.ToDoItem
 import com.google.android.material.appbar.MaterialToolbar
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
@@ -70,10 +74,10 @@ class ToDoListFragment : BaseFragment() {
 //            viewLifecycleOwner
 //        ){ toDoListAdapter.setItems(it)}
 
-        toDoListViewModel.getToDoListItems.observe(
-            viewLifecycleOwner
-        ) {
-            toDoListAdapter.submitData(viewLifecycleOwner.lifecycle, it)
+        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
+            toDoListViewModel.data.collectLatest {
+                toDoListAdapter.submitData(it)
+            }
         }
     }
 
@@ -93,7 +97,7 @@ class ToDoListFragment : BaseFragment() {
 
     private fun handleItemDelete(item: ToDoItem?) {
         item?.let {
-            toDoListViewModel.deleteToDoListItem(it.columnID)
+            toDoListViewModel.deleteToDoListItem(it)
         }
     }
 }

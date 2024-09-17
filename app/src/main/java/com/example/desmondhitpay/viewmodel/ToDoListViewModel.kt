@@ -4,8 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.PagingData
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
 import androidx.paging.cachedIn
+import com.example.desmondhitpay.database.ToDoItemDao
+import com.example.desmondhitpay.datasource.ToDoItemDataSource
 import com.example.desmondhitpay.model.ToDoItem
 import com.example.desmondhitpay.repository.ToDoListRepository
 import kotlinx.coroutines.Dispatchers
@@ -13,8 +16,15 @@ import kotlinx.coroutines.launch
 
 class ToDoListViewModel(private val toDoListRepository: ToDoListRepository): ViewModel() {
 
-    val getToDoListItems: LiveData<PagingData<ToDoItem>> =
-        toDoListRepository.getToDoList().cachedIn(viewModelScope)
+    val data = Pager(
+        PagingConfig(
+            pageSize = 10,
+            enablePlaceholders = false,
+            initialLoadSize = 10
+        ),
+    ) {
+        ToDoItemDataSource(toDoListRepository)
+    }.flow.cachedIn(viewModelScope)
 
     private val toDoListLiveDataInternal = MutableLiveData<List<ToDoItem>>()
     val toDoListLiveData: LiveData<List<ToDoItem>>
@@ -22,43 +32,36 @@ class ToDoListViewModel(private val toDoListRepository: ToDoListRepository): Vie
 
     fun addToDoListItem(toDoItem: ToDoItem) {
         viewModelScope.launch(Dispatchers.IO) {
-            if (toDoListRepository.addToDoItem(toDoItem)) {
-                fetchAllToDoItems()
-            }
+            toDoListRepository.addToDoItem(toDoItem)
         }
     }
 
-    fun deleteToDoListItem(rowID: String) {
+    fun deleteToDoListItem(toDoItem: ToDoItem) {
         viewModelScope.launch(Dispatchers.IO) {
-            if (toDoListRepository.deleteToDoItem(rowID)) {
-                fetchAllToDoItems()
-            }
+            toDoListRepository.deleteToDoItem(toDoItem)
         }
     }
 
-    fun fetchToDoListItems() {
-        viewModelScope.launch(Dispatchers.IO) {
-            fetchAllToDoItems()
-        }
-    }
+//    fun fetchToDoListItems() {
+//        viewModelScope.launch(Dispatchers.IO) {
+//            fetchAllToDoItems()
+//        }
+//    }
 
     fun dropToDoListDatabase() {
         viewModelScope.launch(Dispatchers.IO) {
-            if (toDoListRepository.dropToDoDatabase()) {
-                fetchAllToDoItems()
-            }
+            toDoListRepository.dropToDoDatabase()
         }
     }
 
     fun prepopulateToDoListDatabase() {
         viewModelScope.launch(Dispatchers.IO) {
             toDoListRepository.prePopulateToDoList()
-            fetchAllToDoItems()
         }
     }
 
-    private fun fetchAllToDoItems() {
-        toDoListLiveDataInternal.postValue(toDoListRepository.fetchAllToDoItems())
-    }
+//    private fun fetchAllToDoItems() {
+//        toDoListLiveDataInternal.postValue(toDoListRepository.fetchAllToDoItems())
+//    }
 
 }

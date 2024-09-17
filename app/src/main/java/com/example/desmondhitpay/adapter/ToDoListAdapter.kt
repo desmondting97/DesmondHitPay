@@ -14,23 +14,17 @@ import com.example.desmondhitpay.fragment.ToDoListFragment.Companion.MENU_ARRAY_
 import com.example.desmondhitpay.databinding.ListTodoItemBinding
 import com.example.desmondhitpay.model.ToDoItem
 
-class ToDoListAdapter(
-
-): PagingDataAdapter<ToDoItem, ToDoListAdapter.ViewHolder>(ToDoListDiffCallback()) {
+class ToDoListAdapter: PagingDataAdapter<ToDoItem, ToDoListAdapter.ViewHolder>(ToDoListDiffCallback()) {
 
     private val items = arrayListOf<ToDoItem>()
     private var selectedPosition = -1
-    private val differ = AsyncListDiffer(this, ToDoListDiffCallback())
 
-    class ToDoListDiffCallback: DiffUtil.ItemCallback<ToDoItem>() {
-        override fun areItemsTheSame(oldItem: ToDoItem, newItem: ToDoItem): Boolean = oldItem.columnID == newItem.columnID
+    class ToDoListDiffCallback : DiffUtil.ItemCallback<ToDoItem>() {
+        override fun areItemsTheSame(oldItem: ToDoItem, newItem: ToDoItem): Boolean =
+            oldItem.rowId == newItem.rowId
 
-        override fun areContentsTheSame(oldItem: ToDoItem, newItem: ToDoItem): Boolean = oldItem == newItem
-    }
-
-
-    fun submitList(list: List<ToDoItem>) {
-        differ.submitList(list)
+        override fun areContentsTheSame(oldItem: ToDoItem, newItem: ToDoItem): Boolean =
+            oldItem == newItem
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -42,19 +36,9 @@ class ToDoListAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = items[position]
-        holder.bind(item)
-    }
-
-    override fun getItemCount(): Int {
-        return items.size
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    fun setItems(newItems: List<ToDoItem>) {
-        items.clear()
-        items.addAll(newItems)
-        notifyDataSetChanged()
+        getItem(position)?.let {
+            holder.bind(it)
+        }
     }
 
     fun getSelectedItem(): ToDoItem? {
@@ -68,16 +52,15 @@ class ToDoListAdapter(
         }
     }
 
-    class ViewHolder(
+    inner class ViewHolder(
         private val binding: ListTodoItemBinding,
         private val onLongClickListener: (Int) -> Unit
-    ): RecyclerView.ViewHolder(binding.root), View.OnCreateContextMenuListener {
+    ) : RecyclerView.ViewHolder(binding.root), View.OnCreateContextMenuListener {
 
         init {
             binding.root.apply {
                 setOnLongClickListener {
-                    (tag as? ToDoItem)?.position = adapterPosition
-                    onLongClickListener.invoke(adapterPosition)
+                    onLongClickListener.invoke(absoluteAdapterPosition)
                     false
                 }
 
@@ -88,7 +71,7 @@ class ToDoListAdapter(
         fun bind(item: ToDoItem) {
             binding.apply {
                 titleTextview.text = item.title
-                description.text = item.description
+                description.text = item.desc
                 timestampTextview.text = item.timeStamp
 
                 root.tag = item

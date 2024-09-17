@@ -10,9 +10,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
-import com.example.desmondhitpay.database.ToDoDBAdapter
 import com.example.desmondhitpay.databinding.ActivityMainBinding
-import com.example.desmondhitpay.repository.ToDoListRepository
 import com.example.desmondhitpay.viewmodel.ToDoListViewModel
 import com.example.desmondhitpay.viewmodel.ToDoListViewModelFactory
 
@@ -26,7 +24,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         val factory =
-            ToDoListViewModelFactory(ToDoListRepository(ToDoDBAdapter(applicationContext)))
+            ToDoListViewModelFactory((application as ToDoApplication).repository)
         toDoListViewModel = ViewModelProvider(this, factory)[ToDoListViewModel::class.java]
 
         binding = ActivityMainBinding.inflate(layoutInflater)
