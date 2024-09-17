@@ -1,8 +1,13 @@
 package com.example.desmondhitpay.repository
 
 import androidx.annotation.WorkerThread
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.PagingSource
 import com.example.desmondhitpay.database.ToDoItemDao
 import com.example.desmondhitpay.model.ToDoItem
+import kotlinx.coroutines.flow.Flow
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Random
@@ -12,7 +17,16 @@ class ToDoListRepository(private val toDoItemDao: ToDoItemDao) {
     val PAGE_SIZE = 10
 
     @WorkerThread
-    suspend fun allToDoItems(): List<ToDoItem> = toDoItemDao.getAllToDoItems()
+    fun allToDoItems(): Flow<PagingData<ToDoItem>> {
+
+        return Pager(
+            config = PagingConfig(
+                pageSize = PAGE_SIZE,
+                initialLoadSize = PAGE_SIZE
+            ),
+            pagingSourceFactory = {toDoItemDao.getAllToDoItems() }
+        ).flow
+    }
 
     @WorkerThread
     suspend fun addToDoItem(item: ToDoItem) = toDoItemDao.insert(item)

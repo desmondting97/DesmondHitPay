@@ -1,5 +1,6 @@
 package com.example.desmondhitpay.database
 
+import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -12,7 +13,7 @@ import kotlinx.coroutines.flow.Flow
 interface ToDoItemDao {
 
     @Query("SELECT * FROM todolist_table")
-    suspend fun getAllToDoItems(): List<ToDoItem>
+    fun getAllToDoItems(): PagingSource<Int, ToDoItem>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(toDoItem: ToDoItem)
