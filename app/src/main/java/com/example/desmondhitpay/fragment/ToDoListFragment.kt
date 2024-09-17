@@ -14,7 +14,6 @@ import com.example.desmondhitpay.adapter.ToDoListAdapter
 import com.example.desmondhitpay.databinding.FragmentFirstBinding
 import com.example.desmondhitpay.model.ToDoItem
 import com.google.android.material.appbar.MaterialToolbar
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -39,7 +38,7 @@ class ToDoListFragment : BaseFragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         _binding = FragmentFirstBinding.inflate(inflater, container, false)
 
@@ -70,12 +69,8 @@ class ToDoListFragment : BaseFragment() {
             }
         }
 
-//        toDoListViewModel.toDoListLiveData.observe(
-//            viewLifecycleOwner
-//        ){ toDoListAdapter.setItems(it)}
-
-        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
-            toDoListViewModel.data.collectLatest {
+        lifecycleScope.launch {
+            toDoListViewModel.pagedToDoItems.collectLatest {
                 toDoListAdapter.submitData(it)
             }
         }

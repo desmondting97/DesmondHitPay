@@ -1,7 +1,5 @@
 package com.example.desmondhitpay.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
@@ -12,7 +10,7 @@ import kotlinx.coroutines.launch
 
 class ToDoListViewModel(private val toDoListRepository: ToDoListRepository): ViewModel() {
 
-    val data = toDoListRepository.allToDoItems().cachedIn(viewModelScope)
+    val pagedToDoItems = toDoListRepository.getPagedToDoItems().cachedIn(viewModelScope)
 
     fun addToDoListItem(toDoItem: ToDoItem) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -26,12 +24,6 @@ class ToDoListViewModel(private val toDoListRepository: ToDoListRepository): Vie
         }
     }
 
-//    fun fetchToDoListItems() {
-//        viewModelScope.launch(Dispatchers.IO) {
-//            fetchAllToDoItems()
-//        }
-//    }
-
     fun dropToDoListDatabase() {
         viewModelScope.launch(Dispatchers.IO) {
             toDoListRepository.dropToDoDatabase()
@@ -43,9 +35,4 @@ class ToDoListViewModel(private val toDoListRepository: ToDoListRepository): Vie
             toDoListRepository.prePopulateToDoList()
         }
     }
-
-//    private fun fetchAllToDoItems() {
-//        toDoListLiveDataInternal.postValue(toDoListRepository.fetchAllToDoItems())
-//    }
-
 }

@@ -1,17 +1,15 @@
 package com.example.desmondhitpay.adapter
 
-import android.annotation.SuppressLint
 import android.view.ContextMenu
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
-import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.example.desmondhitpay.databinding.ListTodoItemBinding
 import com.example.desmondhitpay.fragment.ToDoListFragment.Companion.CONTEXT_MENU_TYPE_MANAGE
 import com.example.desmondhitpay.fragment.ToDoListFragment.Companion.MENU_ARRAY_MANAGE
-import com.example.desmondhitpay.databinding.ListTodoItemBinding
 import com.example.desmondhitpay.model.ToDoItem
 
 class ToDoListAdapter: PagingDataAdapter<ToDoItem, ToDoListAdapter.ViewHolder>(ToDoListDiffCallback()) {

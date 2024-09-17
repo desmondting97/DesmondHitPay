@@ -34,7 +34,7 @@ class ToDoDaoTest {
     fun addToDoItem() = runBlocking {
         val toDoItem = ToDoItem(0, "title", "desc", "20240915")
         toDoItemDao.insert(toDoItem)
-        val allToDoItems = toDoItemDao.getAllToDoItems()
+        val allToDoItems = toDoItemDao.getAll()
 
         assertEquals(allToDoItems[0].title, toDoItem.title)
     }
@@ -48,7 +48,7 @@ class ToDoDaoTest {
         toDoItemDao.insert(toDoItem2)
         toDoItemDao.deleteAll()
 
-        val toDoItems = toDoItemDao.getAllToDoItems()
+        val toDoItems = toDoItemDao.getAll()
         assertTrue(toDoItems.isEmpty())
     }
 
