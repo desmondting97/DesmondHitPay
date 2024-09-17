@@ -16,7 +16,6 @@ import com.example.desmondhitpay.model.ToDoItem
 
 class ToDoListAdapter: PagingDataAdapter<ToDoItem, ToDoListAdapter.ViewHolder>(ToDoListDiffCallback()) {
 
-    private val items = arrayListOf<ToDoItem>()
     private var selectedPosition = -1
 
     class ToDoListDiffCallback : DiffUtil.ItemCallback<ToDoItem>() {
@@ -43,7 +42,7 @@ class ToDoListAdapter: PagingDataAdapter<ToDoItem, ToDoListAdapter.ViewHolder>(T
 
     fun getSelectedItem(): ToDoItem? {
         if (selectedPosition == -1) return null
-        return items[selectedPosition]
+        return getItem(selectedPosition)
     }
 
     private fun initOnLongClickListener(): (Int) -> Unit {

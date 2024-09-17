@@ -24,7 +24,7 @@ class ToDoListRepository(private val toDoItemDao: ToDoItemDao) {
                 pageSize = PAGE_SIZE,
                 initialLoadSize = PAGE_SIZE
             ),
-            pagingSourceFactory = {toDoItemDao.getAllToDoItems() }
+            pagingSourceFactory = { toDoItemDao.getAllToDoItems() }
         ).flow
     }
 
